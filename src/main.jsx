@@ -7,30 +7,31 @@ import {
 	Routes,
 	Route
   } from "react-router-dom";
-import Authentication from './pages/authentication/Authentication';
+import Dashboard from './pages/dashboard/Dashboard';
 import MachineLearning from './pages/machinelearning/MachineLearning';
 import Hosting from './pages/hosting/Hosting';
 import Functions from './pages/functions/Functions';
-import Database from './pages/database/Database';
+import Campaign from './pages/campaign/Campaign';
 import Storage from './pages/storage/Storage';
 
 import {ThemeProvider} from '@mui/material/styles'
-import { dashBoardTheme } from './dashboardTheme/dashboardTheme';
+import dashBoardTheme from './dashboardTheme/dashboardTheme';
+import { Provider } from 'react-redux';
+import store from './state/store/store'
 
 ReactDOM.render(
-	<ThemeProvider theme={dashBoardTheme}>
-		<BrowserRouter>
-			<Routes>
-			<Route path="/" element={<App />}>
-				<Route path="authentication" element={<Authentication />} />
-				<Route path="database" element={<Database />} />
-				<Route path="functions" element={<Functions />} />
-				<Route path="hosting" element={<Hosting />} />
-				<Route path="machine-learning" element={<MachineLearning />} />
-				<Route path="storage" element={<Storage />} />
-			</Route>
-			</Routes>
-		</BrowserRouter>
-	</ThemeProvider>,
+	<Provider store = {store}>
+		<ThemeProvider theme={dashBoardTheme}>
+			<BrowserRouter>
+				<Routes>
+				<Route path="/" element={<App />}>
+					<Route index element={<Campaign />} />
+					<Route path="dashboard" element={<Dashboard />} />
+					<Route path="campaign" element={<Campaign />} />
+				</Route>
+				</Routes>
+			</BrowserRouter>
+		</ThemeProvider>
+	</Provider>,
   document.getElementById('root')
 );

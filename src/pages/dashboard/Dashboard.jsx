@@ -1,8 +1,17 @@
 import React from 'react'
 import {Grid} from '@mui/material'
-import CommonButton from '../../components/commonButton/CommonButton'
+import CommonButton from '../../components/common/CommonButton/CommonButton'
+import NotificationBell from '../../components/common/NotificationBell/NotificationBell'
+import { useSelector, useDispatch } from 'react-redux'
+import { pathActions } from '../../state/features/pathSlice'
 
 const Authentication = () => {
+	const currentPath = useSelector((state) => state.path.path)
+	const dispatch = useDispatch()
+	if(currentPath != '/dashboard')
+	  dispatch(pathActions.updatePath('/dashboard'))
+  
+
 	const buttonStyles = {
 		fontSize: '0.875rem',
 		fontWeigt: 600,
@@ -24,24 +33,7 @@ const Authentication = () => {
 	}
 
 	return (
-		<Grid item xs={8}>
-			This is Authentication Page.
-			<CommonButton 
-				size = "large"
-				variant = "contained"
-				sx={buttonStyles}
-			>
-				Add User
-			</CommonButton>
-
-
-			<CommonButton 
-				variant = "outlined"
-				sx={buttonStyles}
-			>
-				Web Setup
-			</CommonButton>
-		</Grid>
+		<div>He</div>
 	)
 }
 

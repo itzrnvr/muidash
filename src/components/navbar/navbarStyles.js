@@ -1,19 +1,27 @@
 export const navbarStyles = {
+    toolbar: {
+        paddingTop: 1,
+        backgroundColor: '#000000',
+    },
+    toolbarTitle: {
+        fontSize: 24,
+        color: '#b287ed'
+    },
     drawer: {
         width: 320,
         flexShrink: 0,
         '& .MuiDrawer-paper': {
             width: 320,
             boxSizing: 'border-box',
-            backgroundColor: '#101F33',
-            color: 'rgba(255, 255, 255, 0.7)',
+            backgroundColor: '#000000',
+            color: '#e0e2fa',
         },
         '& .Mui-selected': {
-            color: 'red',
+            backgroundColor: '#b287ed!important'
         },
     },
     icons: {
-        color: 'rgba(255, 255, 255, 0.7)!important',
+        color: '#e0e2fa!important',
         marginLeft: '20px',
     },
     text: {
