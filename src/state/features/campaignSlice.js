@@ -36,8 +36,9 @@ const updateData = (state, {type, payload}) => {
 }
 
 const deleteData = (state, {type, payload}) => {
-    console.log(payload)
-    state.data = state.data.map(item => item.id != payload)
+    console.log('jj', payload)
+    const ids = payload.map(item => item.id)
+    state.data = state.data.filter(item => !ids.includes(item.id))
 }
 
 const addData = (state, {type, payload}) => {

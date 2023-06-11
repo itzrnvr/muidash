@@ -15,19 +15,7 @@ const headerSlice = createSlice({
             console.log('Event executed', payload)
         },
         addMenu: (state, action) => {
-            console.log(action.payload[0].type)
-            const actionMenu = action.payload.map(item => {
-                if(item.type == 'IconButton'){
-                    serializedIcon = serialize(item.icon)
-                    return {
-                        ...item,
-                        icon: serializedIcon
-                    }
-                } else {
-                    return item
-                }
-            })
-            state.actionMenu = actionMenu
+            state.actionMenu = action.payload
         }
     }
 })

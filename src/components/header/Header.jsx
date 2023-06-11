@@ -12,6 +12,9 @@ import {headerStyles} from './headerStyles'
 import { campaignActions } from '../../state/features/campaignSlice';
 import { headerActions } from '../../state/features/headerSlice';
 import { deserialize } from 'react-serialize';
+import * as MuiIcons from '@mui/icons-material'
+import { AccessAlarm, ThreeDRotation } from '@mui/icons-material';
+
 
 const Header = ({ title}) => {
 
@@ -61,7 +64,7 @@ const Header = ({ title}) => {
                                             sx={headerStyles.helpIcon}
                                             onClick={()=> dispatch(headerActions.executeEvent(dat.event))}
                                         >
-                                            {deserialize(dat.icon)}
+                                            {MuiIcons[DeleteIcon]}
                                         </IconButton>
                                     </Tooltip>
                                 )

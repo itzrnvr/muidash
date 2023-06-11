@@ -12,7 +12,7 @@ import { campaignActions } from '../../../state/features/campaignSlice';
                                
 
 
-export default function InternalDataGrid() {
+export default function InternalDataGrid({onSelectionChange}) {
     const state = useSelector(state => state.campaign.data)
     const dispatch = useDispatch()
 
@@ -20,15 +20,20 @@ export default function InternalDataGrid() {
     const [metaKey, setMetaKey] = useState()
 
 
+    
     const updateItem = (item) => {
         dispatch(campaignActions.updateData(item))
     }
 
+    const handleSelectionChange = (value) => {
+        setSelected(value)
+        onSelectionChange(value)
+    }
     return (
         <div className="card">
             <DataTable value={state} 
             stripedRows paginator rows={5}     
-            selectionMode="multiple" selection={selected} onSelectionChange={(e) => setSelected(e.value)}
+            selectionMode="multiple" selection={selected} onSelectionChange={(e) => handleSelectionChange(e.value)}
             dataKey="id" dragSelection 
             tableStyle={{ width: '100%'}}>
                 <Column field="name" sortable header="Name"></Column>

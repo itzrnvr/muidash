@@ -2,11 +2,10 @@ import React from 'react'
 import InternalDataGrid from './InternalDataGrid'
 
 const SmartDataGrid = ({
-  title, subTitle, 
-  columns, rows, 
+  onSelectionChange
 }) => {
   return (
-    <InternalDataGrid/>
+    <InternalDataGrid onSelectionChange={(value)=> onSelectionChange(value)}/>
   )
 }
 
