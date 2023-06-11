@@ -15,6 +15,7 @@ export const navbarStyles = {
             boxSizing: 'border-box',
             backgroundColor: '#000000',
             color: '#e0e2fa',
+            borderRight: '1px solid white'
         },
         '& .Mui-selected': {
             backgroundColor: '#b287ed!important'

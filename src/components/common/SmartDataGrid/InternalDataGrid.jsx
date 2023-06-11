@@ -1,44 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
+import { InputSwitch } from 'primereact/inputswitch';
 import { Column } from 'primereact/column';
 //theme
 import "primereact/resources/themes/lara-light-indigo/theme.css";     
 //core
-import "primereact/resources/primereact.min.css";                                       
+import "primereact/resources/primereact.min.css";       
+
+import { useSelector, useDispatch } from 'react-redux';
+import { campaignActions } from '../../../state/features/campaignSlice';
                                
 
 
 export default function InternalDataGrid() {
-    const [products, setProducts] = useState([
-        {
-            code: 'skgslf',
-            name: 'First Prod',
-            category: 'cosmetics',
-            quantity: '3'
-        },
-        {
-            code: 'skgslf',
-            name: 'Second Prod',
-            category: 'cosmetics',
-            quantity: '1'
-        },
-        {
-            code: 'skgslf',
-            name: 'Second Prod',
-            category: 'cosmetics',
-            quantity: '7'
-        },
-    ]);
+    const state = useSelector(state => state.campaign.data)
+    const dispatch = useDispatch()
 
-    
+    const [selected, setSelected] = useState()
+    const [metaKey, setMetaKey] = useState()
+
+
+    const updateItem = (item) => {
+        dispatch(campaignActions.updateData(item))
+    }
 
     return (
         <div className="card">
-            <DataTable value={products} tableStyle={{ minWidth: '50rem' }}>
-                <Column field="code" header="Code"></Column>
-                <Column field="name" header="Name"></Column>
-                <Column field="category" header="Category"></Column>
-                <Column field="quantity" header="Quantity"></Column>
+            <DataTable value={state} 
+            stripedRows paginator rows={5}     
+            selectionMode="multiple" selection={selected} onSelectionChange={(e) => setSelected(e.value)}
+            dataKey="id" dragSelection 
+            tableStyle={{ width: '100%'}}>
+                <Column field="name" sortable header="Name"></Column>
+                <Column field="category" sortable  header="Category"></Column>
+                <Column field="date" sortable header="Date Created"></Column>
             </DataTable>
         </div>
     );

@@ -5,48 +5,18 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import HelpIcon from '@mui/icons-material/Help';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
+import { useSelector, useDispatch } from 'react-redux';
+import {headerStyles} from './headerStyles'
+import { campaignActions } from '../../state/features/campaignSlice';
+import { headerActions } from '../../state/features/headerSlice';
+import { deserialize } from 'react-serialize';
 
-const Header = ({ title, actionButtonTitle}) => {
-    const headerStyles = {
-        wrapper: {
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            backgroundColor: '#000000',
-            padding: '20px',
-        },
-        topRow: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'end',
-            alignItems: 'center',
-            marginBottom: '20px',
-            '*': {
-                marginRight: '5px',
-            },
-        },
-        middleRow: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '20px',
-            marginLeft: '320px',
-        },
-        link: {
-            fontWeight: 500,
-            color: 'rgba(255, 255, 255, 0.7)',
-            "&:hover": {
-                color: '#fff',
-                cursor: 'pointer',
-            },
-        },
-        webButton: {
-            marginRight: '5px',
-        },
-    };
+const Header = ({ title}) => {
+
+    const dispatch = useDispatch()
+    const state = useSelector(state=> state.header)
     
     return (
         <Box sx={headerStyles.wrapper}>
@@ -69,22 +39,38 @@ const Header = ({ title, actionButtonTitle}) => {
                     {title}
                 </Typography>
                 <Box>
-                    <CommonButton
-                        sx={headerStyles.webButton}
-                        variant="outlined"
-                    >
-                        {actionButtonTitle}
-                    </CommonButton>
-                    <Tooltip
-                        title="Help"
-                    >
-                        <IconButton
-                            color="white"
-                            sx={headerStyles.helpIcon}
-                        >
-                            <HelpIcon />
-                        </IconButton>
-                    </Tooltip>
+                    {state.actionMenu.length != 0 ? state.actionMenu.map(dat => {
+                        switch(dat.type){
+                            case 'Button': 
+                                return (
+                                    <CommonButton
+                                        sx={headerStyles.webButton}
+                                        variant={dat.variant}
+                                        onClick={()=> dispatch(headerActions.executeEvent(dat.event))}
+                                    >
+                                        {dat.title}
+                                    </CommonButton>
+                                )
+                            case 'IconButton':
+                                return (
+                                    <Tooltip
+                                        title={dat.title}
+                                    >
+                                        <IconButton
+                                            color="white"
+                                            sx={headerStyles.helpIcon}
+                                            onClick={()=> dispatch(headerActions.executeEvent(dat.event))}
+                                        >
+                                            {deserialize(dat.icon)}
+                                        </IconButton>
+                                    </Tooltip>
+                                )
+                            default:
+                                
+                        }
+                    }): ''}
+
+
                 </Box>
             </Box>
         </Box>

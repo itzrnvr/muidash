@@ -1,39 +1,36 @@
-import React from 'react'
-import {Grid} from '@mui/material'
+import React, {useEffect} from 'react'
+import {Grid, Typography, Box} from '@mui/material'
 import CommonButton from '../../components/common/CommonButton/CommonButton'
 import NotificationBell from '../../components/common/NotificationBell/NotificationBell'
 import { useSelector, useDispatch } from 'react-redux'
 import { pathActions } from '../../state/features/pathSlice'
+import { headerActions } from '../../state/features/headerSlice'
 
 const Authentication = () => {
 	const currentPath = useSelector((state) => state.path.path)
 	const dispatch = useDispatch()
 	if(currentPath != '/dashboard')
 	  dispatch(pathActions.updatePath('/dashboard'))
+
+	useEffect(()=>{
+		dispatch(headerActions.addMenu([
+				{
+					type: 'Button',
+					variant: 'outlined',
+					title: 'View More',
+					event: 'ViewMore'
+				}
+			])	
+		)
+	}, [])
   
 
-	const buttonStyles = {
-		fontSize: '0.875rem',
-		fontWeigt: 600,
-		textTransform: 'capitalize',
-		borderRadius: 2.5,
-		'&:MuiButton-contained': {
-			backgroundColor: '#0009be5',
-			'&:hover': {
-				backgroundColor: '0006db3'
-			},
-		},
-		'&:MuiButton-outlined': {
-			color: '#fff',
-			borderColor: '#fff',
-			'&:hover': {
-				backgroundColor: 'transparent'
-			}
-		}
-	}
-
 	return (
-		<div>He</div>
+		<Box sx={{marginLeft: '336px'}}>
+			<Typography variant='h1'>To be IMPLEMENTED</Typography>
+			<Typography variant='h3'>All the analytics and stats will be present here</Typography>
+
+		</Box>
 	)
 }
 

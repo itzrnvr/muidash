@@ -3,7 +3,7 @@ export const headerStyles = {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#009be5',
+        backgroundColor: '#000000   ',
         padding: '20px',
     },
     topRow: {

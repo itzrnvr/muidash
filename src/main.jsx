@@ -8,11 +8,7 @@ import {
 	Route
   } from "react-router-dom";
 import Dashboard from './pages/dashboard/Dashboard';
-import MachineLearning from './pages/machinelearning/MachineLearning';
-import Hosting from './pages/hosting/Hosting';
-import Functions from './pages/functions/Functions';
 import Campaign from './pages/campaign/Campaign';
-import Storage from './pages/storage/Storage';
 
 import {ThemeProvider} from '@mui/material/styles'
 import dashBoardTheme from './dashboardTheme/dashboardTheme';
