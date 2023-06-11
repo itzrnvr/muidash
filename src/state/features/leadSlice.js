@@ -2,25 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
         dialog: {
-            addCampaign: {
+            addLead: {
                 isOpen: false
             }
         },
         selectedData: [],
-        data: [
-            {
-                id: 0,
-                name: 'First Campaign',
-                category: 'HealthInsure',
-                date: '20/04/2023 '
-            },
-            {   
-                id: 1,
-                name: 'Second Campaign',
-                category: 'cosmetics',
-                date: '10/04/2023 '
-            },
-        ]
+        data: []
     }
 
 
@@ -29,11 +16,11 @@ const setSelectedData = (state, {payload}) => {
 }
 
 const openDialog = (state) => {
-    state.dialog.addCampaign.isOpen = true
+    state.dialog.addLead.isOpen = true
 }
 
 const closeDialog = (state) => {
-    state.dialog.addCampaign.isOpen = false
+    state.dialog.addLead.isOpen = false
 }
 
 const updateData = (state, {type, payload}) => {
@@ -47,18 +34,17 @@ const deleteData = (state, {type, payload}) => {
     state.data = state.data.filter(item => !ids.includes(item.id))
 }
 
-const addData = (state, {type, payload}) => {
+const addData = (state, {payload}) => {
     console.log( 'ADDdATA',payload) 
-    console.log('addDATA', type)
-    state.data.push({...payload, id: state.data.length})
+    state.data.push({id: state.data.length, ...payload})
 } 
 
-const campaignSlice = createSlice({
-    name: 'campaign',
+const leadsSlice = createSlice({
+    name: 'leads',
     initialState,
     reducers: {
-        updateAllData: (state, action) => {
-             state = action.payload
+        setData: (state, {payload}) => {
+             state.data = payload
         },
         updateData,
         deleteData,
@@ -69,7 +55,7 @@ const campaignSlice = createSlice({
     }
 })
 
-const campaignReducer = campaignSlice.reducer
-const campaignActions = campaignSlice.actions
+const leadsReducer = leadsSlice.reducer
+const leadsActions = leadsSlice.actions
 
-export {campaignReducer, campaignActions}
+export {leadsReducer, leadsActions}

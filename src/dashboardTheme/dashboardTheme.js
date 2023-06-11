@@ -4,6 +4,23 @@ const dashBoardTheme = createTheme({
     components: {
         MuiButton: {
             styleOverrides: {
+                select: {
+                    '&:before': {
+                        color: 'white',
+                        borderColor: 'white',
+                    },
+                    '&:after': {
+                        color: 'white',
+                        borderColor: 'white',
+                    },
+                    '&:not(.Mui-disabled):hover::before': {
+                        color: 'white',
+                        borderColor: 'white',
+                    },
+                },
+                icon: {
+                    fill: 'white',
+                },
                 root: {
                     fontSize: '0.875rem',
                     fontWeight: 600,

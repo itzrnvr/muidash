@@ -1,84 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import MainDataList from '../../components/common/SmartDataGrid/SmartDataGrid'
-import { Grid, Box} from '@mui/material'
-import SmartDataGrid from '../../components/common/SmartDataGrid/SmartDataGrid'
-import { pathActions } from '../../state/features/pathSlice'
-import AddCampaignForm from '../../components/dialog/AddCampaignForm'
-import { campaignActions } from '../../state/features/campaignSlice'
+import React, { useEffect } from 'react'
+import {Box} from '@mui/material'
+import {Outlet, useActionData, useNavigate} from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { headerActions } from '../../state/features/headerSlice'
-import getCurrentDate from '../../utils/getCurrentDate'
-import { useMemo } from 'react'
-
 const Campaign = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const currentPath = useSelector((state) => state.path.path)
-  if(currentPath != '/campaign')
-    dispatch(pathActions.updatePath('/campaign'))
-  const isDialogOpen = useSelector(state => state.campaign.dialog.addCampaign.isOpen)
-  const headerEvent = useSelector(state => state.header.event)
-
-  const selected = useRef()
-
-  const handleOnSelectionChanged = (value) => {
-    selected.current = value
-  }
-
-  useEffect(() => { 
-    dispatch(headerActions.addMenu([
-      {
-        type: 'Button',
-        variant: 'contained',
-        title: 'Add Campaign',
-        event: 'openDialog'
-      },
-      {
-        type: 'Button',
-        variant: 'outlined',
-        title: 'Delete Campaign',
-        event: 'deleteCampaign'
-      },
-
-    ]))
-  }, [])
 
   useEffect(()=>{
-    switch(headerEvent){
-      case 'openDialog': 
-        console.log("Open Dialog called")
-        dispatch(campaignActions.openDialog())
-        break;
-      case 'deleteCampaign': 
-        dispatch(campaignActions.deleteData(selected.current))
-        dispatch(headerActions.executeEvent('campaignItemDeleted'))
-        console.log("heard")
-        console.log(selected.current)
-        break;
-      default:
-    }
-  },[headerEvent])
+    navigate('/campaign/campaignManagement')
+  },[])
 
-  const handleDialogOnClose = (type, data) => {
-
-    if(type == 'Positive'){
-      console.log('camp', 'lll  ')
-      dispatch(campaignActions.addData({       
-        ...data,
-        date: getCurrentDate()
-      }))
-      dispatch(headerActions.executeEvent('closeDialogPositive'))
-    } else {
-      dispatch(headerActions.executeEvent('closeDialogNegative'))
-    }
-    dispatch(campaignActions.closeDialog())
-  }
-
-  return (    
-    <Box sx={{marginLeft: '336px', marginTop: 2, marginBottom: 2,
-      width: '100vw'
+  return (
+    <Box sx={{
+      marginLeft: '336px', 
+      marginTop: 2, 
+      marginBottom: 2, 
+      marginRight: 2,
+      width: '100%', 
+      height: '100%'
     }}>
-      <SmartDataGrid onSelectionChange={(value) => handleOnSelectionChanged(value)}/>
-      <AddCampaignForm isOpen={isDialogOpen} onClose={(type, data)=> handleDialogOnClose(type, data)}/>
+      <Outlet/>
     </Box>
   )
 }

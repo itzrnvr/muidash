@@ -2,10 +2,16 @@ import React from 'react'
 import InternalDataGrid from './InternalDataGrid'
 
 const SmartDataGrid = ({
+  data,
+  onRowSelect,
   onSelectionChange
 }) => {
   return (
-    <InternalDataGrid onSelectionChange={(value)=> onSelectionChange(value)}/>
+    <InternalDataGrid 
+      data={data}
+      onSelectionChange={(value)=> onSelectionChange(value)}
+      onRowSelect={(data) => onRowSelect(data)}
+    />
   )
 }
 

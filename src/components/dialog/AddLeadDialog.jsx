@@ -15,38 +15,35 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export default function AddCampaignForm({
+export default function AddLeadDialog({
     isOpen, 
     onClose,
     title,
+    data,
 }) {
 
   const inputName = React.useRef(null)
   const inputCategory = React.useRef(null)
 
-  const [campaignData, setCampaignData] = React.useState({
-    name: '',
-    category: '',
-  })
+  console.log(data)
 
-  const onChangeName = (e) => {
-    setCampaignData({
-      ...campaignData,
-      name: e.target.value
-    })
-  }
+  const [leadData, setLeadData] = React.useState({})
 
-  const onChangeCategory = (e) => {
-    setCampaignData({
-      ...campaignData,
-      category: e.target.value
+  const onChangeName = (key, e) => {
+    // setCampaignData({
+    //   ...campaignData,
+    //   name: e.target.value
+    // })
+    setLeadData({
+        ...leadData,
+        [key]: e.target.value
     })
+
+    console.log(leadData)
   }
 
   const handleDialogOnClose = (type) => {
-    onClose(type, campaignData)
-    inputName.current.value = ''
-    inputCategory.current.value = ''
+    onClose(type, leadData)
   }
 
   return (
@@ -59,32 +56,32 @@ export default function AddCampaignForm({
               alignItems="center"
           >
             <CampaignIcon sx={{marginRight: 1}}/>
-            New Campaign
+            New Lead
           </Box>
         </DialogTitle>
         <DialogContent>
-          <TextField
-            ref={inputName}
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Campaign Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            onChange={(e) => onChangeName(e)}
-          />
-            <TextField
-                ref={inputCategory}
+            {/* {data && Object.keys(data).map((key, index) => (
+               key != 'id' && ( index == 0 ? <TextField
+                    autoFocus
+                    margin="dense"
+                    id="index"
+                    label={key}
+                    type="text"
+                    fullWidth
+                    variant="outlined"
+                    onChange={(e) => onChangeName(key, e)}
+                /> : <TextField
                 sx={{marginTop: 3}}
                 margin="dense"
-                id="category"
-                label="Category"
+                id={index}
+                label={key}
                 type="text"
                 fullWidth
                 variant="outlined"
-                onChange={(e) => onChangeCategory(e)}
-            />
+                onChange={(e) => onChangeName(key, e)}
+            />)
+            ))
+            } */}
         </DialogContent>
         <DialogActions>
           <Button onClick={()=>handleDialogOnClose('Negative')}>Cancel</Button>

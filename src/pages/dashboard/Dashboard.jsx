@@ -13,6 +13,10 @@ const Authentication = () => {
 	  dispatch(pathActions.updatePath('/dashboard'))
 
 	useEffect(()=>{
+	    dispatch(headerActions.updateTopText({
+			'title': 'Dashboard',
+			'subtitle': ''
+		  }))
 		dispatch(headerActions.addMenu([
 				{
 					type: 'Button',

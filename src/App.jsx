@@ -10,37 +10,12 @@ import { useSelector } from 'react-redux';
 
 function App() {
 	const currentPath = useSelector((state) => state.path.path)
-	const [title, setTitle] = useState(null);
-	const location = useLocation();
-
-	const headerData = {
-		'/campaign': {
-			title: "Add Campaign",
-			handleClick: () => {
-				console.log("clicked for campaign")
-			}
-		},
-		'/dashboard': {
-			title: "View More",
-			handleClick: () => {
-				console.log("clicked for dashboard")
-			}
-		},
-		
-	}
 	
-	useEffect(() => {
-	  const parsedTitle = location.pathname.replace(/\W/g, ' ');
-	  setTitle(parsedTitle);
-	}, [location]);
-  
-
-
 	return(
 		<Grid container>
 			<CssBaseline/>
 			<Navbar />	
-			<Header title={title} actionButtonTitle={headerData[currentPath].title} />
+			<Header/>
 			<Outlet />
 		</Grid>
 	)

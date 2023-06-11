@@ -14,6 +14,8 @@ import { headerActions } from '../../state/features/headerSlice';
 import { deserialize } from 'react-serialize';
 import * as MuiIcons from '@mui/icons-material'
 import { AccessAlarm, ThreeDRotation } from '@mui/icons-material';
+import LeadHeaderMenu from '../../pages/campaign/pages/LeadManagement/LeadHeaderMenu';
+import HeaderMenu from './HeaderMenu';
 
 
 const Header = ({ title}) => {
@@ -35,13 +37,31 @@ const Header = ({ title}) => {
                 <Avatar src="https://mui.com/static/images/avatar/1.jpg" />
             </Box>
             <Box sx={headerStyles.middleRow}>
-                <Typography
+            <Box>
+            <Typography
+                    sx={{
+                        fontWeight: 600,
+                        fontSize: 32
+                    }}
                     variant="h1"
-                    color="white"
+                    color="white!important"
                 >
-                    {title}
+                    {state.topText.title}
                 </Typography>
-                <Box>
+                <Typography
+                    sx={{
+                        fontWeight: 400,
+                        fontSize: 24
+                    }}
+                    variant="h1"
+                    color="#d99cff!important"
+                >
+                    {state.topText.subtitle}
+                </Typography>
+            </Box>
+       
+                <HeaderMenu/>
+                {/* <Box>
                     {state.actionMenu.length != 0 ? state.actionMenu.map(dat => {
                         switch(dat.type){
                             case 'Button': 
@@ -74,7 +94,7 @@ const Header = ({ title}) => {
                     }): ''}
 
 
-                </Box>
+                </Box> */}
             </Box>
         </Box>
     )

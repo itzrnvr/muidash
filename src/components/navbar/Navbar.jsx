@@ -50,7 +50,7 @@ const Navbar = () => {
 				<List>
 					{mainNavbarItems.map((item, index) => (
 						<ListItemButton 
-						selected={item.route == currentPath}
+						selected={item.subRoutes.includes(currentPath)}
 						key={item.id}
 						onClick = {()=> handleOnClick(item)}
 						>

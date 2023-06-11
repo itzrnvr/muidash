@@ -13,11 +13,13 @@ export const mainNavbarItems = [
         icon: <DashboardIcon />,
         label: 'Dashboard',
         route: '/dashboard',
+        subRoutes: ['/dashboard']
     },
     {
         id: 1,
         icon: <CampaignIcon />,
         label: 'Campaign',
-        route: '/campaign',
+        route: '/campaign/campaignManagement',
+        subRoutes: ['/campaign/campaignManagement', '/campaign/leadManagement']
     }
 ]
