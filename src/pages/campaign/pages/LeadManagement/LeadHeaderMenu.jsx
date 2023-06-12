@@ -68,6 +68,7 @@ const LeadHeaderMenu = () => {
         variant="outlined"
         startIcon={<CallIcon />}
         sx={{ marginRight: "1rem" }}
+        onClick={()=> dispatch(leadsActions.openCallLeadsDialog())}
       >
         Smart-Dialing
       </Button>

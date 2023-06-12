@@ -11,6 +11,7 @@ import getCurrentDate from '../../../../utils/getCurrentDate'
 import { useParams } from 'react-router-dom'
 import { leadsActions } from '../../../../state/features/leadSlice'
 import AddLeadDialog from '../../../../components/dialog/AddLeadDialog'
+import CallLeadsDialog from '../../../../components/dialog/CallLeadsDialog'
 
 const LeadManagement = () => {
   const {id, name} = useParams()
@@ -19,13 +20,11 @@ const LeadManagement = () => {
   const currentPath = useSelector((state) => state.path.path)
   const state = useSelector(state => state.leads)
   const isDialogOpen = state.dialog.addLead.isOpen
+  const isCallLeadsDialogOpen = state.dialog.callLead.isOpen
   const headerEvent = useSelector(state => state.header.event)
 
-
-  const selected = useRef()
-
   const handleOnSelectionChanged = (value) => {
-    selected.current = value
+    dispatch(leadsActions.setSelectedData(value))
   }
 
   useEffect(() => { 
@@ -48,6 +47,10 @@ const LeadManagement = () => {
     dispatch(leadsActions.closeDialog())
   }
 
+  const handleCallLeadsDialogClose = (event) => {
+    dispatch(leadsActions.closeCallLeadsDialog())
+  }
+
   return (    
     <Box >
       <SmartDataGrid 
@@ -55,6 +58,7 @@ const LeadManagement = () => {
       onRowSelect={(data)=> console.log(data)}
       onSelectionChange={(value) => handleOnSelectionChanged(value)}/>
       <AddLeadDialog data={state.data[0]} isOpen={isDialogOpen} onClose={(type, data)=> handleDialogOnClose(type, data)}/>
+      <CallLeadsDialog data={state.selectedData} isOpen={isCallLeadsDialogOpen} onClose={(event)=> handleCallLeadsDialogClose(event)}/>
     </Box>
   )
 }

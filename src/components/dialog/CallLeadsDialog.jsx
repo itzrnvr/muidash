@@ -9,41 +9,32 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import {Box, Divider} from '@mui/material'
-import { alignProperty } from '@mui/material/styles/cssUtils';
+import { alignProperty } from '@mui/material/styles/cssUtils';x
+import CallLeadsList from './CallLeadsList';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export default function CallLeads({
+export default function CallLeadsDialog({
     isOpen, 
     onClose,
     title,
     data,
 }) {
 
-  const inputName = React.useRef(null)
-  const inputCategory = React.useRef(null)
+  const dispatch = useDispatch()
+  const selectedData = useSelector((state) => state.leads.selectedData)
 
   console.log(data)
 
-  const [leadData, setLeadData] = React.useState({})
-
-  const onChangeName = (key, e) => {
-    // setCampaignData({
-    //   ...campaignData,
-    //   name: e.target.value
-    // })
-    setLeadData({
-        ...leadData,
-        [key]: e.target.value
-    })
-
-    console.log(leadData)
-  }
-
   const handleDialogOnClose = (type) => {
     onClose(type, leadData)
+  }
+
+  const callLeads = () => {
+    console.log()
   }
 
   return (
@@ -56,36 +47,15 @@ export default function CallLeads({
               alignItems="center"
           >
             <CampaignIcon sx={{marginRight: 1}}/>
-            New Lead
+            Smart-Dialing
           </Box>
         </DialogTitle>
         <DialogContent>
-            {data && Object.keys(data).map((key, index) => (
-               key != 'id' && ( index == 0 ? <TextField
-                    autoFocus
-                    margin="dense"
-                    id="index"
-                    label={key}
-                    type="text"
-                    fullWidth
-                    variant="outlined"
-                    onChange={(e) => onChangeName(key, e)}
-                /> : <TextField
-                sx={{marginTop: 3}}
-                margin="dense"
-                id={index}
-                label={key}
-                type="text"
-                fullWidth
-                variant="outlined"
-                onChange={(e) => onChangeName(key, e)}
-            />)
-            ))
-            }
+
+        <CallLeadsList data={selectedData}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={()=>handleDialogOnClose('Negative')}>Cancel</Button>
-          <Button onClick={()=>handleDialogOnClose('Positive')}>Create Campaign</Button>
         </DialogActions>
       </Dialog>
     </div>

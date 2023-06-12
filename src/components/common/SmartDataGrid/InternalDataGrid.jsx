@@ -30,7 +30,7 @@ export default function InternalDataGrid({
     const [sortOrder, setSortOrder] = useState(null)
     const [sortField, setSortField] = useState(null)
     const requestRef = useRef(0)
-    console.log("From INTernal grid", data)
+    // console.log("From INTernal grid", data)
     const [loading, setLoading] = useState(false);
     const [totalRecords, setTotalRecords] = useState(0);
     const [currentData, setCurrentData] = useState(null);
@@ -127,16 +127,18 @@ export default function InternalDataGrid({
     };
 
     const handleRowSelect = (event) => {
-        const {ctrlKey, shiftKey, altKey, metaKey} = event.originalEvent
-        if(ctrlKey || shiftKey || altKey) {
-            console.log(ctrlKey)
-            console.log(shiftKey)
-            console.log(altKey)
-        } else {
-            onRowSelect(event.data)
-        }
+        // const {ctrlKey, shiftKey, altKey, metaKey} = event.originalEvent
+        // if(ctrlKey || shiftKey || altKey) {
+        //     console.log(ctrlKey)
+        //     console.log(shiftKey)
+        //     console.log(altKey)
+        // } else {
+        //     onRowSelect(event.data)
+        // }
 
-        console.log("Row select event", event)
+        // console.log("Row select event", event)
+
+        onRowSelect(event.data)
 
     }
     

@@ -4,12 +4,23 @@ const initialState = {
         dialog: {
             addLead: {
                 isOpen: false
+            },
+            callLead: {
+                isOpen: false
             }
         },
         selectedData: [],
         data: []
     }
 
+
+const openCallLeadsDialog = (state) => {
+    state.dialog.callLead.isOpen = true
+}
+
+const closeCallLeadsDialog = (state) => {
+    state.dialog.callLead.isOpen = false
+}
 
 const setSelectedData = (state, {payload}) => {
     state.selectedData = payload
@@ -51,7 +62,9 @@ const leadsSlice = createSlice({
         addData,
         openDialog,
         closeDialog,
-        setSelectedData
+        setSelectedData,
+        closeCallLeadsDialog,
+        openCallLeadsDialog
     }
 })
 
