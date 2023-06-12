@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Column } from 'primereact/column';
@@ -17,50 +17,6 @@ export default function InternalDataGrid({
     onSelectionChange, 
     onRowSelect
 }) {
-    console.log("From INTernal grid", data)
-    const [virtualItems, setVirtualItems] = useState();
-    const [lazyLoading, setLazyLoading] = useState(false);
-
-    let loadLazyTimeout = 50;
-    const [metaKey, setMetaKey] = useState(true);
-    const [selected, setSelected] = useState()
-
-
-    const loadCarsLazy = (event) => {
-        !lazyLoading && setLazyLoading(true);
-
-        if (loadLazyTimeout) {
-            clearTimeout(loadLazyTimeout);
-        }
-
-        //simulate remote connection with a timeout
-        loadLazyTimeout = setTimeout(() => {
-            let _virtualItems = [...virtualItems];
-            let { first, last } = event;
-
-            //load data of required page
-            console.log('slice', first)
-            console.log('slice', last)
-            console.log(virtualItems.length)
-            console.log('data', data)
-            const loadedItems = data.slice(first, last);
-            console.log('from loaded items', loadedItems)
-
-            //populate page of virtual cars
-            Array.prototype.splice.apply(_virtualItems, [...[first, last - first], ...loadedItems]);
-            console.log('_virtualItems', _virtualItems)
-            console.log('virtualItems', virtualItems)
-            setVirtualItems(_virtualItems);
-            console.log("RIGHT BEFORE", virtualItems)
-            setLazyLoading(false);
-        }, 50);
-    };
-
-    useEffect(()=>{
-        console.log('efffectivedata', data)
-        setVirtualItems(Array.from({ length: data.length }))
-    },[data])
-
     const defaultFilters = () => {
         let holder = {}
         data.length > 0 ? Object.keys(data[0]).map((key, index) => {
@@ -69,6 +25,72 @@ export default function InternalDataGrid({
         console.log('Default filters', holder)
         return holder
     }
+    const requestRef = useRef(0)
+    console.log("From INTernal grid", data)
+    const [loading, setLoading] = useState(false);
+    const [totalRecords, setTotalRecords] = useState(0);
+    const [currentData, setCurrentData] = useState(null);
+    const [metaKey, setMetaKey] = useState(true);
+    const [selected, setSelected] = useState()
+    const [lazyState, setlazyState] = useState({
+        first: 0,
+        rows: 10,
+        page: 1,
+        sortField: null,
+        sortOrder: null,
+        filters: defaultFilters()
+    });
+
+    let networkTimeout = null;
+
+
+    useEffect(() => {
+        loadLazyData();
+    }, [lazyState, data]);
+
+
+    const dataSource = async ({lazyEvent}) => {
+        const {first, rows, page, sortField, sortOrder, filters} = lazyEvent
+        console.log('dataSource ', lazyEvent)
+
+        const getPartialData = () => {
+            let end = (first + 10) 
+            // if(page == 0){
+            //     end = (page * 10) 
+            // } else if (page == 1) {
+                
+            // }
+            let start = end - 10
+            start = start < 0 ? 0 : start
+
+            console.log("dataSource", `start ${start} end ${end}`)
+            return data.slice(start, end)
+        }
+        return {
+            totalRecords: data.length,
+            currentData: getPartialData()
+        }
+    }
+    
+    const loadLazyData = () => {
+        setLoading(true);
+
+        if (networkTimeout) {
+            clearTimeout(networkTimeout);
+        }
+
+        //imitate delay of a backend call
+        networkTimeout = setTimeout(() => {
+            dataSource({ lazyEvent: lazyState}).then((item) => {
+                setTotalRecords(item.totalRecords);
+                setCurrentData(item.currentData);
+                setLoading(false);
+                console.log('currentDataLazy', item.currentData)
+            });
+        }, 1000);
+    };
+
+ 
 
     
     const onPage = (event) => {
@@ -113,17 +135,16 @@ export default function InternalDataGrid({
 
     return (
         <DataTable 
-            dataKey={'id'}
-            value={virtualItems} scrollable scrollHeight="100vh"
-            virtualScrollerOptions={{ lazy: true, onLazyLoad: loadCarsLazy, itemSize: 100, delay: 0, showLoader: false, loading: lazyLoading }}
-            // lazy filterDisplay="row" paginator
-            //         first={lazyState.first} rows={100} totalRecords={totalRecords} onPage={onPage}
-                  
-            //         onFilter={onFilter} filters={lazyState.filters} loading={loading}
+           
+            value={currentData} 
+
+            lazy filterDisplay="row" dataKey="id" paginator
+                    first={lazyState.first} rows={10} totalRecords={totalRecords} onPage={onPage}
+                    onSort={onSort} sortField={lazyState.sortField} sortOrder={lazyState.sortOrder}
+                    onFilter={onFilter} filters={lazyState.filters} loading={loading} 
+
             columnResizeMode="expand" resizableColumns
             tableStyle={{minWidth: '50rem' }}
-            // scrollable scrollHeight="100vh  " virtualScrollerOptions={{ itemSize: 46 }}
-          
             metaKeySelection={metaKey}
             onRowSelect={(event) => handleRowSelect(event)}     
             selectionMode="multiple" selection={selected} onSelectionChange={(e) => handleSelectionChange(e.value)}
