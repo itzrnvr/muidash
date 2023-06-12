@@ -4,12 +4,13 @@ import { InputSwitch } from 'primereact/inputswitch';
 import { Column } from 'primereact/column';
 import { Skeleton } from 'primereact/skeleton';
 import {Box} from '@mui/material'
+import { sort } from 'fast-sort';
 
 //theme
 import "primereact/resources/themes/lara-light-indigo/theme.css";     
 //core
 import "primereact/resources/primereact.min.css";       
-import { Co2Sharp } from '@mui/icons-material';
+import { Co2Sharp, SettingsRounded, SortRounded } from '@mui/icons-material';
 //TODO added update feature
 
 export default function InternalDataGrid({
@@ -25,6 +26,9 @@ export default function InternalDataGrid({
         console.log('Default filters', holder)
         return holder
     }
+    const [allData, setAllData] = useState([])
+    const [sortOrder, setSortOrder] = useState(null)
+    const [sortField, setSortField] = useState(null)
     const requestRef = useRef(0)
     console.log("From INTernal grid", data)
     const [loading, setLoading] = useState(false);
@@ -43,31 +47,47 @@ export default function InternalDataGrid({
 
     let networkTimeout = null;
 
+    useEffect(() => {
+        setAllData(data)
+    }, [data])
+
 
     useEffect(() => {
         loadLazyData();
-    }, [lazyState, data]);
+    }, [lazyState, allData]);
 
+
+    const sortItems = () => {
+        sortOrder > 0 ? setAllData(sort(allData).desc(item => item[sortField])): 
+        setAllData(sort(allData).asc(item => item[sortField]))
+    }
+
+    useEffect(()=> {
+        if(sortOrder && sortField){
+            sortItems()
+        }
+
+    
+    }, [sortOrder, sortField])
 
     const dataSource = async ({lazyEvent}) => {
         const {first, rows, page, sortField, sortOrder, filters} = lazyEvent
         console.log('dataSource ', lazyEvent)
 
+        setSortField(sortField)
+        setSortOrder(sortOrder)
+
+
         const getPartialData = () => {
-            let end = (first + 10) 
-            // if(page == 0){
-            //     end = (page * 10) 
-            // } else if (page == 1) {
-                
-            // }
-            let start = end - 10
+            let end = (first + 50) 
+            let start = end - 50
             start = start < 0 ? 0 : start
 
             console.log("dataSource", `start ${start} end ${end}`)
-            return data.slice(start, end)
+            return allData.slice(start, end)
         }
         return {
-            totalRecords: data.length,
+            totalRecords: allData.length,
             currentData: getPartialData()
         }
     }
@@ -87,7 +107,7 @@ export default function InternalDataGrid({
                 setLoading(false);
                 console.log('currentDataLazy', item.currentData)
             });
-        }, 1000);
+        }, 100);
     };
 
  
@@ -120,9 +140,9 @@ export default function InternalDataGrid({
 
     }
     
-    const handleSelectionChange = (data) => {
-        setSelected(data)
-        onSelectionChange(data)
+    const handleSelectionChange = (items) => {
+        setSelected(items)
+        onSelectionChange(items)
     }
 
     // const loadingTemplate = (options) => {
@@ -139,7 +159,7 @@ export default function InternalDataGrid({
             value={currentData} 
 
             lazy filterDisplay="row" dataKey="id" paginator
-                    first={lazyState.first} rows={10} totalRecords={totalRecords} onPage={onPage}
+                    first={lazyState.first} rows={50} totalRecords={totalRecords} onPage={onPage}
                     onSort={onSort} sortField={lazyState.sortField} sortOrder={lazyState.sortOrder}
                     onFilter={onFilter} filters={lazyState.filters} loading={loading} 
 
@@ -150,7 +170,7 @@ export default function InternalDataGrid({
             selectionMode="multiple" selection={selected} onSelectionChange={(e) => handleSelectionChange(e.value)}
             dragSelection 
     >
-                {data.length > 0 ? Object.entries(data[0]).map(([key, value]) => (
+                {allData.length > 0 ? Object.entries(data[0]).map(([key, value]) => (
                     <Column field={key} sortable  header={key}></Column>
                 )) : <></>}
         </DataTable>

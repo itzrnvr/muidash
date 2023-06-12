@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export default function AddLeadDialog({
+export default function CallLeads({
     isOpen, 
     onClose,
     title,
