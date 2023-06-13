@@ -6,7 +6,7 @@ import {Box, Button} from '@mui/material'
 import UploadFile from '@mui/icons-material/UploadFile'
 import handleCsvUpload from './handleCsvUpload'
 import { leadsActions } from '../../../../state/features/leadSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CallIcon from '@mui/icons-material/Call';
 import BasicSelect from '../../../../components/common/BasicSelect/BasicSelect'
 import AddIcon from '@mui/icons-material/Add';
@@ -15,6 +15,9 @@ const LeadHeaderMenu = () => {
   const dispatch = useDispatch()
   const [csvData, setCsvData] = useState([]);
   const [filename, setFilename] = useState("");
+
+  const selectedData = useSelector(state => state.leads.selectedData)
+  const shouldOpen = selectedData.length > 0 ? true : false
 
   const handleFileUpload = (e) => {
     if (!e.target.files) {
@@ -68,7 +71,7 @@ const LeadHeaderMenu = () => {
         variant="outlined"
         startIcon={<CallIcon />}
         sx={{ marginRight: "1rem" }}
-        onClick={()=> dispatch(leadsActions.openCallLeadsDialog())}
+        onClick={()=> shouldOpen ? dispatch(leadsActions.openCallLeadsDialog()): console.log("no")}
       >
         Smart-Dialing
       </Button>

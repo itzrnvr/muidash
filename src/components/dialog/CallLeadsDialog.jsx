@@ -9,9 +9,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import {Box, Divider} from '@mui/material'
-import { alignProperty } from '@mui/material/styles/cssUtils';x
+import { alignProperty } from '@mui/material/styles/cssUtils';
 import CallLeadsList from './CallLeadsList';
 import { useSelector, useDispatch } from 'react-redux';
+import io from 'socket.io-client'
+import { socket } from '../../socket';
+import axios from 'axios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -25,17 +28,41 @@ export default function CallLeadsDialog({
 }) {
 
   const dispatch = useDispatch()
-  const selectedData = useSelector((state) => state.leads.selectedData)
 
   console.log(data)
 
-  const handleDialogOnClose = (type) => {
-    onClose(type, leadData)
+  const handleDialogOnClose = () => {
+    onClose()
   }
 
-  const callLeads = () => {
-    console.log()
+  const callLeads = (item) => {
+    axios.post('http://localhost:3000/smartCall', item, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+  })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
+
+  React.useEffect(() => {
+    console.log("DataToBeCalled", data)
+    socket.connect();
+
+    socket.on('foo', (data) => {
+      console.log(data)
+    });
+
+    callLeads(data[0])
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [isOpen])
 
   return (
     <div>
@@ -52,10 +79,10 @@ export default function CallLeadsDialog({
         </DialogTitle>
         <DialogContent>
 
-        <CallLeadsList data={selectedData}/>
+        <CallLeadsList data={data}/>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>handleDialogOnClose('Negative')}>Cancel</Button>
+          <Button onClick={()=>handleDialogOnClose()}>Cancel</Button>
         </DialogActions>
       </Dialog>
     </div>

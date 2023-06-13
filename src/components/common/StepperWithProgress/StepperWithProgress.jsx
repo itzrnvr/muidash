@@ -4,7 +4,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 
-const StepperWithProgress = ({data}) => {
+const StepperWithProgress = ({callEvents}) => {
     const data = [
         {
             label: 'Initiating Call',
@@ -28,7 +28,7 @@ const StepperWithProgress = ({data}) => {
         }
     ]
 
-    const lastPos = useMemo(() => (data.length - 1), data.length)
+    const lastPos = data.length
 
     return (
         <Box sx={{

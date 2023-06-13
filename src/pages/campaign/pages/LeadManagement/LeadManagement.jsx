@@ -47,7 +47,7 @@ const LeadManagement = () => {
     dispatch(leadsActions.closeDialog())
   }
 
-  const handleCallLeadsDialogClose = (event) => {
+  const handleCallLeadsDialogClose = () => {
     dispatch(leadsActions.closeCallLeadsDialog())
   }
 
@@ -58,7 +58,7 @@ const LeadManagement = () => {
       onRowSelect={(data)=> console.log(data)}
       onSelectionChange={(value) => handleOnSelectionChanged(value)}/>
       <AddLeadDialog data={state.data[0]} isOpen={isDialogOpen} onClose={(type, data)=> handleDialogOnClose(type, data)}/>
-      <CallLeadsDialog data={state.selectedData} isOpen={isCallLeadsDialogOpen} onClose={(event)=> handleCallLeadsDialogClose(event)}/>
+      <CallLeadsDialog data={state.selectedData} isOpen={isCallLeadsDialogOpen} onClose={()=> handleCallLeadsDialogClose()}/>
     </Box>
   )
 }
