@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import CallIcon from '@mui/icons-material/Call';
 import BasicSelect from '../../../../components/common/BasicSelect/BasicSelect'
 import AddIcon from '@mui/icons-material/Add';
+import axios from 'axios'
 
 const LeadHeaderMenu = () => {
   const dispatch = useDispatch()
@@ -18,6 +19,29 @@ const LeadHeaderMenu = () => {
 
   const selectedData = useSelector(state => state.leads.selectedData)
   const shouldOpen = selectedData.length > 0 ? true : false
+
+
+  const callLeads = (item) => {
+    axios.post('http://localhost:3000/smartCall', item, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+
+  const handleDialing = () => {
+    shouldOpen ? dispatch(leadsActions.openCallLeadsDialog()): console.log("no")
+    callLeads(selectedData[0])
+    console.log("calling", selectedData[0])
+  }
+
 
   const handleFileUpload = (e) => {
     if (!e.target.files) {
@@ -71,7 +95,7 @@ const LeadHeaderMenu = () => {
         variant="outlined"
         startIcon={<CallIcon />}
         sx={{ marginRight: "1rem" }}
-        onClick={()=> shouldOpen ? dispatch(leadsActions.openCallLeadsDialog()): console.log("no")}
+        onClick={()=> handleDialing()}
       >
         Smart-Dialing
       </Button>

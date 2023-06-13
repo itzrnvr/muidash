@@ -26,8 +26,9 @@ export default function CallLeadsDialog({
     title,
     data,
 }) {
-
   const dispatch = useDispatch()
+
+  const [event, setEvent] = React.useState('')
 
   console.log(data)
 
@@ -35,34 +36,20 @@ export default function CallLeadsDialog({
     onClose()
   }
 
-  const callLeads = (item) => {
-    axios.post('http://localhost:3000/smartCall', item, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-  })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
 
   React.useEffect(() => {
     console.log("DataToBeCalled", data)
     socket.connect();
 
-    socket.on('foo', (data) => {
-      console.log(data)
+    socket.on('callEvents', (callEvent) => {
+      console.log(callEvent)
+      setEvent(callEvent)
     });
-
-    callLeads(data[0])
 
     return () => {
       socket.disconnect();
     };
-  }, [isOpen])
+  }, [])
 
   return (
     <div>
@@ -79,7 +66,7 @@ export default function CallLeadsDialog({
         </DialogTitle>
         <DialogContent>
 
-        <CallLeadsList data={data}/>
+        <CallLeadsList data={data} event={event}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={()=>handleDialogOnClose()}>Cancel</Button>

@@ -12,10 +12,35 @@ import { Typography } from '@mui/material';
 import CallStepper from './CallStepper';
 import StepperWithProgress, { StepperElement } from '../common/StepperWithProgress/StepperWithProgress';
 
-export default function CallLeadsList({data}) {
+export default function CallLeadsList({data, event}) {
+
+
+  const stepperData = [
+    {
+        label: 'Initiating Call',
+        desc: 'Trying to reach the number',
+        status: 'loading'
+    },
+    {
+        label: 'Ringing',
+        desc: 'Trying to reach the number',
+        status: 'success'
+    },
+    {
+        label: 'Answered',
+        desc: 'dsgjosslks',
+        status: 'stale',
+    },
+    {
+        label: 'Completed',
+        desc: 'Trying to reach the number',
+        status: 'fail'
+    }
+  ]
+
   return (
     <Box sx={{ width: '500px',  bgcolor: 'background.paper'}}>
-      <Typography sx={{color: 'black!important'}} variant='h6'>Calling 911</Typography>
+      <Typography sx={{color: 'black!important'}} variant='h6'>{`Calling ${data[0]['Lead Number']}`}</Typography>
       <StepperWithProgress data={data}/>
     </Box>
   );
